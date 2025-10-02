@@ -29,7 +29,7 @@ class SequentialPipeline():
             data = (data,)  # wrap into tuple
         for action in self.action_list:
             data = action(data)
-        return data
+        return data[0] if len(data) == 1 else data
 
 class OneToManyOperation():
     '''
