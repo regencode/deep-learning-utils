@@ -1,5 +1,5 @@
-numpy==1.23.1
-tifffile==2025.5.10
-torch==2.4.1
-torchtyping==0.1.5
-torchvision==0.19.1
+numpy
+tifffile
+torch
+torchtyping
+torchvision
