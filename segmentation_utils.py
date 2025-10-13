@@ -122,7 +122,7 @@ def display_images(image_dict: Dict[str, str | np.ndarray],
         rows = math.ceil(float(num_images) / cols)
     print(f"using cols: {cols} and rows: {rows}")
     print(f"using figsize: {figsize}")
-    print("image dict:", image_dict)
+    print("image dict:", image_dict, flush=True)
     plt.figure(figsize=figsize)
     for i, (title, image) in enumerate(image_dict.items()):
         plt.subplot(rows, cols, i+1)
