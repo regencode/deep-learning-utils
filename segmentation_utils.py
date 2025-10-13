@@ -1,13 +1,15 @@
 import numpy
+import math
 import torch, torchvision
 import torch.utils.data
 import typing, torchtyping
 import csv
 import tifffile
-from typing import Any, Callable, List
+from typing import Any, Callable, Dict, List
 import torch.nn.functional as F
 import numpy as np
 import os
+import matplotlib.pyplot as plt
 
 
 Callback = Callable[[Any], Any]
@@ -102,4 +104,43 @@ class OneHotEncoder:
 
     def __call__(self, label: torch.LongTensor) -> torch.Tensor:
         return F.one_hot(label, num_classes=self.num_classes)
+
+def display_images(image_dict: Dict[str, str | np.ndarray], 
+                   rows: int | None = None, cols: int = 4, 
+                   figsize: tuple[int, int] = (10, 10)): 
+    '''
+    Display images when passed a dict {title: image}
+    title: string
+    image: string | np.ndarray
+    Default: 
+        - images are displayed in 4 columns
+        - figsize (5, 5)
+    '''
+    num_images = len(image_dict.keys())
+    print(f"image_dict has {num_images} images")
+    if rows is None:
+        rows = math.ceil(float(num_images) / cols)
+    print(f"using cols: {cols} and rows: {rows}")
+    print(f"using figsize: {figsize}")
+    
+    plt.figure(figsize=figsize)
+    for i, (title, image) in enumerate(image_dict):
+        plt.subplot(rows, cols, i+1)
+        try:
+            if isinstance(image, str):
+                # handle path
+                image = plt.imread(image)
+        except Exception as e:
+            print("Exception:", e)
+
+        plt.imshow(image)
+        plt.title(title)
+    plt.show()
+
+    
+    
+    
+
+
+
 
