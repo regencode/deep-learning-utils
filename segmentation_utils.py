@@ -124,7 +124,7 @@ def display_images(image_dict: Dict[str, str | np.ndarray],
     print(f"using figsize: {figsize}")
     
     plt.figure(figsize=figsize)
-    for i, (title, image) in enumerate(image_dict):
+    for i, (title, image) in enumerate(image_dict.items()):
         plt.subplot(rows, cols, i+1)
         try:
             if isinstance(image, str):
