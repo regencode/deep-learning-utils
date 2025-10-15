@@ -105,13 +105,14 @@ class OneHotEncoder:
     def __call__(self, label: torch.LongTensor) -> torch.Tensor:
         return F.one_hot(label, num_classes=self.num_classes)
 
-def display_images(image_dict: Dict[str, str | np.ndarray], 
+def display_images(image_dict: Dict[str, str | np.ndarray | torch.Tensor], 
                    rows: int | None = None, cols: int = 4, 
-                   figsize: tuple[int, int] = (10, 10)): 
+                   figsize: tuple[int, int] = (10, 10),
+                   print_dict: bool = False): 
     '''
     Display images when passed a dict {title: image}
     title: string
-    image: string | np.ndarray
+    image: string | np.ndarray | torch.Tensor
     Default: 
         - images are displayed in 4 columns
         - figsize (5, 5)
@@ -122,7 +123,7 @@ def display_images(image_dict: Dict[str, str | np.ndarray],
         rows = math.ceil(float(num_images) / cols)
     print(f"using cols: {cols} and rows: {rows}")
     print(f"using figsize: {figsize}")
-    print("image dict:", image_dict, flush=True)
+    print("image dict:", image_dict, flush=True) if print_dict else None
     plt.figure(figsize=figsize)
     for i, (title, image) in enumerate(image_dict.items()):
         plt.subplot(rows, cols, i+1)
@@ -130,17 +131,12 @@ def display_images(image_dict: Dict[str, str | np.ndarray],
             if isinstance(image, str):
                 # handle path
                 image = plt.imread(image)
+            elif isinstance(image, torch.Tensor):
+                image = image.permute(2, 0, 1)
+
         except Exception as e:
             print("Exception:", e)
 
         plt.imshow(image)
         plt.title(title)
     plt.show()
-
-    
-    
-    
-
-
-
-
