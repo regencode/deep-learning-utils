@@ -131,8 +131,8 @@ def display_images(image_dict: Dict[str, str | np.ndarray | torch.Tensor],
             if isinstance(image, str):
                 # handle path
                 image = plt.imread(image)
-            elif isinstance(image, torch.Tensor):
-                image = image.permute(2, 0, 1)
+            elif isinstance(image, torch.Tensor): #(C, W, H)
+                image = image.permute(1, 2, 0)
 
         except Exception as e:
             print("Exception:", e)
