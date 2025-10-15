@@ -27,16 +27,17 @@ class SequentialPipeline():
         self.action_list = action_list
 
     def __call__(self, data: Any, *args) -> tuple[Any, ...]:
-        if not isinstance(data, tuple):
-            data = (data,)  # wrap into tuple
+        '''
+        args is consumed with no output.
+        '''
         for action in self.action_list:
             data = action(data)
-        return data[0] if len(data) == 1 else data
+        return data
 
 class OneToManyOperation():
     '''
     Apply a list of actions (n actions) to a single data (1 data),
-    returning multiple data (n data)
+    returning multiple data (n data) as tuple
     *args is discarded.
     '''
     def __init__(self, each_action):
@@ -46,12 +47,12 @@ class OneToManyOperation():
         new_data = []
         for action in self.each_action:
             new_data.append(action(data))
-        return new_data
+        return tuple(*new_data)
 
 class GroupedOperation():
     '''
     Apply the same action (1 action) to a group of data (n_data),
-    returning mutiple data (n_data)
+    returning mutiple data (n_data) as tuple
     __call__ is variadic.
     '''
     def __init__(self, action: Callback):
@@ -59,7 +60,7 @@ class GroupedOperation():
 
     def __call__(self, *data: Any):
         data = self.action(data)
-        return data
+        return tuple(*data)
 
 class InMemoryDataset(torch.utils.data.Dataset):
     def __init__(self, X: List[Path], y: List[Path]):
