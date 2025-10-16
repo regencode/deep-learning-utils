@@ -133,7 +133,7 @@ def display_images(image_dict: Dict[str, str | np.ndarray | torch.Tensor],
                 # handle path
                 image = plt.imread(image)
             elif isinstance(image, torch.Tensor): #(C, W, H)
-                image = image.permute(1, 2, 0).cpu()
+                image = image.cpu()
 
         except Exception as e:
             print("Exception:", e)
